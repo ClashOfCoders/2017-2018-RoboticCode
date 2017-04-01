@@ -1,3 +1,4 @@
+
 /*
 All rights reserved.
 
@@ -28,27 +29,27 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package org.firstinspires.ftc.teamcode;
+        package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.I2cDeviceSynchImpl;
-import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-import com.vuforia.Trackable;
+        import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
+        import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
+        import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+        import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+        import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+        import com.qualcomm.robotcore.hardware.DcMotor;
+        import com.qualcomm.robotcore.hardware.I2cDeviceSynchImpl;
+        import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
+        import com.qualcomm.robotcore.util.ElapsedTime;
+        import com.qualcomm.robotcore.util.Range;
+        import com.vuforia.Trackable;
 
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
+        import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+        import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+        import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+        import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 
-import javax.xml.datatype.Duration;
-import java.util.Date;
+        import javax.xml.datatype.Duration;
+        import java.util.Date;
 //import org.firstinspires.ftc.teamcode.external.HardwareBallShooter;
 
 /**
@@ -86,7 +87,7 @@ import java.util.Date;
 
 @Autonomous(name="Team11155: Blue Aliance Autonamous Code", group="Auto")
 //@Disabled
-public class AutonamousBlueAlianceTeam11155Save extends LinearOpMode {
+public class BlueAllianceCode extends LinearOpMode {
 
 
     HardwareBallShooter robot = new HardwareBallShooter();
@@ -107,7 +108,7 @@ public class AutonamousBlueAlianceTeam11155Save extends LinearOpMode {
     // The can/should be tweaked to suite the specific robot drive train.
     double DRIVE_SPEED = 0.15;     // Nominal speed for better accuracy.
     double TURN_SPEED = 0.15;     // Nominal half speed for better accuracy.
-    double stopDistance=20;
+    double stopDistance=8;
 
     static final double HEADING_THRESHOLD = 1;      // As tight as we can make it with an integer gyro
     static final double P_TURN_COEFF = 0.001;     // Larger is more responsive, but also less stable
@@ -126,7 +127,7 @@ public class AutonamousBlueAlianceTeam11155Save extends LinearOpMode {
         telemetry.addData(">", "Initial");    //
         telemetry.update();
         robot.init(hardwareMap);
-         robot.gyro.calibrate();
+        robot.gyro.calibrate();
 
         robot.setDriveEncoderMode(false);
 
@@ -154,12 +155,12 @@ public class AutonamousBlueAlianceTeam11155Save extends LinearOpMode {
         while (!isStarted()) {
             if (Math.max(robot.leftMaxCount, robot.rightMaxCount) > 0){
                 telemetry.addData("maximum counts per second ball shooter", robot.max_encoder_clicks_per_second);
-            telemetry.addData("Left  Motor  Max Click Per Second", robot.leftMaxCount);
-            telemetry.addData("Right Motor  Max CLick per second ", robot.rightMaxCount);
-        }
-        else{
-            telemetry.addData(">", "encoders Not working Reboot the robot");
-        }
+                telemetry.addData("Left  Motor  Max Click Per Second", robot.leftMaxCount);
+                telemetry.addData("Right Motor  Max CLick per second ", robot.rightMaxCount);
+            }
+            else{
+                telemetry.addData(">", "encoders Not working Reboot the robot");
+            }
 
 
             if (robot.sensorRGB.alpha()>1) {
@@ -167,7 +168,7 @@ public class AutonamousBlueAlianceTeam11155Save extends LinearOpMode {
                 telemetry.addData("RedValue", robot.sensorRGB.red());
                 telemetry.addData("BlueValue", robot.sensorRGB.blue());
             }
-         else{
+            else{
                 telemetry.addData(">","ColorSensorNotWorking Restart the Robot");
             }
 
@@ -185,32 +186,33 @@ public class AutonamousBlueAlianceTeam11155Save extends LinearOpMode {
 
         waitForStart();
 
-       robot.shootTWoBallControlled(robot.targetCountPerSecondBallShooter-50,800);
+        robot.shootTWoBallControlled(robot.targetCountPerSecondBallShooter-50,800);
 
 
         robot.setDriveSpeed(DRIVE_SPEED, DRIVE_SPEED, -1);
         robot.setDriveEncoderMode(true);
         gyroDrive(DRIVE_SPEED*2,-12,0);
-        while(opModeIsActive() && robot.gyro.getIntegratedZValue()>-30){
+        while(opModeIsActive() && robot.gyro.getIntegratedZValue()>-25){
             robot.setDriveSpeed(DRIVE_SPEED,-DRIVE_SPEED,1);
         }
         robot.setDriveEncoderMode(true);
-        // Uses the gyroDrive directly with a heading of 35 degrees to the wall. Uses automatic tracing.
-        gyroDrive(DRIVE_SPEED*2,-24,-30);
+        // Uses the gyroDrive directly with a heading of 25 degrees to the wall. Uses automatic tracing.
+        gyroDrive(DRIVE_SPEED*2,-24,-27);
         robot.stopRobot();
 
         double rangeFrontDistance=robot.rangeRead(robot.rangeAreader);
         while( opModeIsActive() && rangeFrontDistance>(stopDistance)) {
-            telemetry.addData(">", "distanceRange", rangeFrontDistance);
-            telemetry.update();
             rangeFrontDistance=robot.rangeRead(robot.rangeAreader);
             gyroDriveWithoutEncoder(DRIVE_SPEED * 2.5, -1, -25);
             idle();
         }
+        robot.stopRobot();
+        while(opModeIsActive() && robot.gyro.getIntegratedZValue()<-15)
+            robot.setDriveSpeed(-DRIVE_SPEED,DRIVE_SPEED,1);
 
         // Next perform wall following untial the while line on the floor is detected
-          while (opModeIsActive() && robot.odsSensor.getRawLightDetected()<2) {
-              gyroDriveWithoutEncoder(DRIVE_SPEED , -1, wallFollowGryo);
+        while (opModeIsActive() && robot.odsSensor.getRawLightDetected()<2) {
+            gyroDriveWithoutEncoder(DRIVE_SPEED , -1, wallFollowGryo);
             //wallFollow(DRIVE_SPEED * 0.5, -1,targetHeading,  10, robot.gyro, robot.range,robot.odsSensor);
         }
         robot.stopRobot();
@@ -218,7 +220,7 @@ public class AutonamousBlueAlianceTeam11155Save extends LinearOpMode {
 
         double distToWall = robot.rangeRead(robot.rangeAreader);
         long timeDifferenceMS = (long) (distToWall - 3) * 600 /3;
-         robot.outBeaconButton(timeDifferenceMS,this);
+        robot.outBeaconButton(timeDifferenceMS,this);
 
         try{
             Thread.sleep(50);
@@ -242,37 +244,37 @@ public class AutonamousBlueAlianceTeam11155Save extends LinearOpMode {
         // Now depends on the color it first reads, it either moves or stays there to push the button
 
         telemetry.addData("red1", redValue1);
-       // telemetry.addData("red2", redValue2);
+        // telemetry.addData("red2", redValue2);
         telemetry.addData("blue1", blueValue1);
         //telemetry.addData("blue2", blueValue2);
         telemetry.update();
 
 
-            if (blueValue1>redValue1)
-            {
-                robot.pushBeaconButton(timeDifferenceMS,this,robot.rangeAreader);
+        if (blueValue1>redValue1)
+        {
+            robot.pushBeaconButton(timeDifferenceMS,this,robot.rangeAreader);
+        }
+        else {
+            gyroDrive(DRIVE_SPEED, 5.5, 0);
+            robot.pushBeaconButton(timeDifferenceMS,this,robot.rangeAreader);
+
+        }
+
+        // After the button are pushed, read the color again, and if wrong wait for 5 seconds to push the button again
+        if(robot.sensorRGB.red()>robot.sensorRGB.blue()){
+            try{
+                Thread.sleep(5050);
             }
-            else {
-                gyroDrive(DRIVE_SPEED, 5.5, 0);
-                    robot.pushBeaconButton(timeDifferenceMS,this,robot.rangeAreader);
+            catch (InterruptedException ex){
+                Thread.currentThread().interrupted();
 
             }
-
-            // After the button are pushed, read the color again, and if wrong wait for 5 seconds to push the button again
-           if(robot.sensorRGB.red()>robot.sensorRGB.blue()){
-               try{
-                   Thread.sleep(5050);
-               }
-               catch (InterruptedException ex){
-                   Thread.currentThread().interrupted();
-
-               }
-               robot.pushBeaconButton(timeDifferenceMS,this,robot.rangeAreader);
-           }
+            robot.pushBeaconButton(timeDifferenceMS,this,robot.rangeAreader);
+        }
 
         robot.retractBeaconButton(timeDifferenceMS,this);
 
-    // Now it goes for the second button
+        // Now it goes for the second button
 
         gyroDrive(DRIVE_SPEED*3,22,wallFollowGryo);
         robot.setDriveEncoderMode(true);
@@ -378,66 +380,66 @@ public class AutonamousBlueAlianceTeam11155Save extends LinearOpMode {
         double leftSpeed;
         double rightSpeed;
         // keep looping while we are still active, and BOTH motors are running.
-       // while (opModeIsActive() && Math.abs(error) > 1 && errorAngle > 1 && && Math.abs(distanceTraveled) < Math.abs(distanceLimit))
+        // while (opModeIsActive() && Math.abs(error) > 1 && errorAngle > 1 && && Math.abs(distanceTraveled) < Math.abs(distanceLimit))
 
-             currentDistance = rangeSensor.getDistance(DistanceUnit.INCH) * Math.cos(Math.toRadians(gyro.getIntegratedZValue()));
-
-
-            // adjust relative speed based on heading error.
-            error = targetDistance - currentDistance;
-
-            errorAngle = getError(targetHeading);
-            if (Math.abs(errorAngle)>steerAngleLimit){
-                steer=getSteer(errorAngle,P_DRIVE_COEFF);
-                useAngle=true;
-            }
-
-            else {
-                steer = getSteer(error, P_WALLFOLLOW_COEF);
-                useAngle=false;
-            }
+        currentDistance = rangeSensor.getDistance(DistanceUnit.INCH) * Math.cos(Math.toRadians(gyro.getIntegratedZValue()));
 
 
-            // if driving in reverse, the motor correction also needs to be reversed
-            if (driveDirection < 0)
-                steer *= -1.0;
+        // adjust relative speed based on heading error.
+        error = targetDistance - currentDistance;
 
-            if (Math.abs(steer)>Math.abs(speed)){
-                steer=steer/Math.abs(steer)*Math.abs(speed);
-            }
-            // Limit the maximum turn to prevent overturning when there is a big error
+        errorAngle = getError(targetHeading);
+        if (Math.abs(errorAngle)>steerAngleLimit){
+            steer=getSteer(errorAngle,P_DRIVE_COEFF);
+            useAngle=true;
+        }
 
-            if (Math.abs(errorAngle)>steerAngleLimit && steer*errorAngle>0){
-                steer=0;
-            }
-
-
-            leftSpeed = speed - steer;
-            rightSpeed = speed + steer;
-
-            // Normalize speeds if any one exceeds +/- 1.0;
-            max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
-            if (max > 1.0) {
-                leftSpeed /= max;
-                rightSpeed /= max;
-            }
-
-            robot.setDriveSpeed(leftSpeed,rightSpeed,driveDirection);
+        else {
+            steer = getSteer(error, P_WALLFOLLOW_COEF);
+            useAngle=false;
+        }
 
 
+        // if driving in reverse, the motor correction also needs to be reversed
+        if (driveDirection < 0)
+            steer *= -1.0;
 
-            // Display drive status for the driver.
-            telemetry.addData("Current Distance Measured", "%5.2f", currentDistance);
-            telemetry.addData("Err/St", "%5.1f/%5.1f", error, steer);
-            telemetry.addData("Actual", "%7d:%7d", robot.leftWheelFront.getCurrentPosition(),
-                    robot.rightWheelFront.getCurrentPosition());
-            telemetry.addData("Speed", "%5.2f:%5.2f", leftSpeed, rightSpeed);
-            telemetry.addData("Use Angle:",useAngle);
-            telemetry.addData("OpticalSensorOutput:",ods.getRawLightDetected());
-            telemetry.update();
+        if (Math.abs(steer)>Math.abs(speed)){
+            steer=steer/Math.abs(steer)*Math.abs(speed);
+        }
+        // Limit the maximum turn to prevent overturning when there is a big error
 
-            // Allow time for other processes to run.
-            idle();
+        if (Math.abs(errorAngle)>steerAngleLimit && steer*errorAngle>0){
+            steer=0;
+        }
+
+
+        leftSpeed = speed - steer;
+        rightSpeed = speed + steer;
+
+        // Normalize speeds if any one exceeds +/- 1.0;
+        max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
+        if (max > 1.0) {
+            leftSpeed /= max;
+            rightSpeed /= max;
+        }
+
+        robot.setDriveSpeed(leftSpeed,rightSpeed,driveDirection);
+
+
+
+        // Display drive status for the driver.
+        telemetry.addData("Current Distance Measured", "%5.2f", currentDistance);
+        telemetry.addData("Err/St", "%5.1f/%5.1f", error, steer);
+        telemetry.addData("Actual", "%7d:%7d", robot.leftWheelFront.getCurrentPosition(),
+                robot.rightWheelFront.getCurrentPosition());
+        telemetry.addData("Speed", "%5.2f:%5.2f", leftSpeed, rightSpeed);
+        telemetry.addData("Use Angle:",useAngle);
+        telemetry.addData("OpticalSensorOutput:",ods.getRawLightDetected());
+        telemetry.update();
+
+        // Allow time for other processes to run.
+        idle();
 
 
 
@@ -528,17 +530,17 @@ public class AutonamousBlueAlianceTeam11155Save extends LinearOpMode {
 
 
     /**
-    *  Method to drive on a fixed compass bearing (angle), based on encoder counts.
-    *  Move will stop if either of these conditions occur:
-    *  1) Move gets to the desired position
-    *  2) Driver stops the opmode running.
-    *
-    * @param speed      Target speed for forward motion.  Should allow for _/- variance for adjusting heading
-    * @param distance   Distance (in inches) to move from current position.  Negative distance means move backwards.
-    * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
-    *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-    *                   If a relative angle is required, add/subtract from current heading.
-    */
+     *  Method to drive on a fixed compass bearing (angle), based on encoder counts.
+     *  Move will stop if either of these conditions occur:
+     *  1) Move gets to the desired position
+     *  2) Driver stops the opmode running.
+     *
+     * @param speed      Target speed for forward motion.  Should allow for _/- variance for adjusting heading
+     * @param distance   Distance (in inches) to move from current position.  Negative distance means move backwards.
+     * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
+     *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
+     *                   If a relative angle is required, add/subtract from current heading.
+     */
     public void gyroDrive ( double speed,
                             double distance,
                             double angle) throws InterruptedException {
@@ -585,7 +587,7 @@ public class AutonamousBlueAlianceTeam11155Save extends LinearOpMode {
 
             // keep looping while we are still active, and BOTH motors are running.
             while (opModeIsActive() &&
-                   (robot.leftWheelFront.isBusy() && robot.rightWheelFront.isBusy() && robot.leftWheelBack.isBusy() && robot.rightWheelBack.isBusy())) {
+                    (robot.leftWheelFront.isBusy() && robot.rightWheelFront.isBusy() && robot.leftWheelBack.isBusy() && robot.rightWheelBack.isBusy())) {
 
                 // adjust relative speed based on heading error.
                 error = getError(angle);
@@ -615,12 +617,11 @@ public class AutonamousBlueAlianceTeam11155Save extends LinearOpMode {
                 telemetry.addData("Err/St",  "%5.1f/%5.1f",  error, steer);
                 telemetry.addData("Target",  "%7d:%7d",      newLeftTargetFront,  newRightTargetFront);
                 telemetry.addData("Actual",  "%7d:%7d",      robot.leftWheelFront.getCurrentPosition(),
-                                                             robot.rightWheelFront.getCurrentPosition());
+                        robot.rightWheelFront.getCurrentPosition());
                 telemetry.addData("Speed",   "%5.2f:%5.2f",  leftSpeed, rightSpeed);
                 telemetry.addData("gyroTankDriveMode:",true);
                 telemetry.addData("rangeSensorOutput",robot.rangeRead(robot.rangeAreader));
                 telemetry.addData("gyroSensorOutput",robot.gyro.getIntegratedZValue());
-                telemetry.addData("calculated distance to wall",8/Math.cos(Math.toRadians(40)) );
                 telemetry.update();
 
                 // Allow time for other processes to run.
@@ -641,7 +642,7 @@ public class AutonamousBlueAlianceTeam11155Save extends LinearOpMode {
 
     // This program simply drives the robot forward with an specified angle
     public void gyroDriveWithoutEncoder ( double speed, int dirveDirection,
-                            double angle) throws InterruptedException {
+                                          double angle) throws InterruptedException {
 
 
         double  max;
@@ -652,47 +653,47 @@ public class AutonamousBlueAlianceTeam11155Save extends LinearOpMode {
 
 
 
-            // start motion.
+        // start motion.
 
-            //  keep driving while we are still active, and BOTH motors are running.
-           // if(robot.leftWheelFront.isBusy() && robot.rightWheelFront.isBusy() && robot.leftWheelBack.isBusy() && robot.rightWheelBack.isBusy()) {
+        //  keep driving while we are still active, and BOTH motors are running.
+        // if(robot.leftWheelFront.isBusy() && robot.rightWheelFront.isBusy() && robot.leftWheelBack.isBusy() && robot.rightWheelBack.isBusy()) {
 
-                // adjust relative speed based on heading error.
-                error = getError(angle);
-                steer = getSteer(error, P_DRIVE_COEFF);
+        // adjust relative speed based on heading error.
+        error = getError(angle);
+        steer = getSteer(error, P_DRIVE_COEFF);
 
-                // if driving in reverse, the motor correction also needs to be reversed
-                if (dirveDirection < 0)
-                    steer *= -1.0;
+        // if driving in reverse, the motor correction also needs to be reversed
+        if (dirveDirection < 0)
+            steer *= -1.0;
 
-                leftSpeed = speed -steer;
-                rightSpeed = speed +steer;
+        leftSpeed = speed -steer;
+        rightSpeed = speed +steer;
 
-                // Normalize speeds if any one exceeds +/- 1.0;
-                max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
-                if (max > 1.0)
-                {
-                    leftSpeed /= max;
-                    rightSpeed /= max;
-                }
-                robot.setDriveSpeed(leftSpeed,rightSpeed,dirveDirection);
+        // Normalize speeds if any one exceeds +/- 1.0;
+        max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
+        if (max > 1.0)
+        {
+            leftSpeed /= max;
+            rightSpeed /= max;
+        }
+        robot.setDriveSpeed(leftSpeed,rightSpeed,dirveDirection);
 
 
-                // Display drive status for the driver.
-                telemetry.addData("Err/St",  "%5.1f/%5.1f",  error, steer);
-                 telemetry.addData("Actual",  "%7d:%7d",      robot.leftWheelBack.getCurrentPosition(),
-                        robot.rightWheelBack.getCurrentPosition());
-                telemetry.addData("Speed",   "%5.2f:%5.2f",  leftSpeed, rightSpeed);
+        // Display drive status for the driver.
+        telemetry.addData("Err/St",  "%5.1f/%5.1f",  error, steer);
+        telemetry.addData("Actual",  "%7d:%7d",      robot.leftWheelBack.getCurrentPosition(),
+                robot.rightWheelBack.getCurrentPosition());
+        telemetry.addData("Speed",   "%5.2f:%5.2f",  leftSpeed, rightSpeed);
         telemetry.addData("gyroTankDriveMode:",true);
         telemetry.addData("rangeSensorOutput",robot.rangeRead(robot.rangeAreader));
         telemetry.addData("gyroSensorOutput",robot.gyro.getIntegratedZValue());
         telemetry.addData("calculated distance to wall",8/Math.cos(Math.toRadians(40)) );
         telemetry.update();
-                telemetry.update();
+        telemetry.update();
 
-                // Allow time for other processes to run.
-                idle();
-            //
+        // Allow time for other processes to run.
+        idle();
+        //
 
 
     }
@@ -713,7 +714,7 @@ public class AutonamousBlueAlianceTeam11155Save extends LinearOpMode {
      * @throws InterruptedException
      */
     public void gyroTurn (  double speed, double angle)
-                              throws InterruptedException {
+            throws InterruptedException {
 
         // keep looping while we are still active, and not on heading.
         while (opModeIsActive() && !onHeadingNew(speed, angle, P_TURN_COEFF)) {
@@ -742,7 +743,7 @@ public class AutonamousBlueAlianceTeam11155Save extends LinearOpMode {
      * @throws InterruptedException
      */
     public void gyroHold( double speed, double angle, double holdTime)
-                            throws InterruptedException {
+            throws InterruptedException {
 
         ElapsedTime holdTimer = new ElapsedTime();
 
@@ -846,7 +847,7 @@ public class AutonamousBlueAlianceTeam11155Save extends LinearOpMode {
         if (pose != null) {
             VectorF translation = pose.getTranslation();
             double xx = translation.get(0);
-           // double yy = translation.get(1);
+            // double yy = translation.get(1);
             double zz = translation.get(2);
 
             degreesToTurn = Math.toDegrees(Math.atan2(xx, -zz));
@@ -880,17 +881,15 @@ public class AutonamousBlueAlianceTeam11155Save extends LinearOpMode {
         // Ensure that the opmode is still active
         while (opModeIsActive() && rangeSensor.getDistance(DistanceUnit.INCH)> parkingParam[0]) {
 
-              gyroDriveWithoutEncoder(speed,direction,angle);
-
-            }
-
-            // Stop all motion;
-            robot.stopRobot();
+            gyroDriveWithoutEncoder(speed,direction,angle);
 
         }
+
+        // Stop all motion;
+        robot.stopRobot();
+
     }
-
-
+}
 
 
 
