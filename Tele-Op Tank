@@ -69,7 +69,6 @@ public class TemplateOpMode_Team11155TankOld extends OpMode {
     double DriveMode;
     double slow=0.175;
 
-
     //public final static double CLAW_HOME = 0.2;
     /*
      * Code to run ONCE when the driver hits INIT
@@ -87,15 +86,9 @@ public class TemplateOpMode_Team11155TankOld extends OpMode {
 
         robot.setDriveEncoderMode(true);
 
-
         // Send telemetry message to alert driver that we are calibrating;
         telemetry.addData(">", "Calibrating Gyro");    //
         telemetry.update();
-
-
-
-
-
 
     }
 
@@ -129,8 +122,6 @@ public class TemplateOpMode_Team11155TankOld extends OpMode {
         telemetry.addData(">", "Robot Heading = %d", robot.gyro.getIntegratedZValue());
         telemetry.update();
 
-
-
     }
 
     /*
@@ -138,7 +129,6 @@ public class TemplateOpMode_Team11155TankOld extends OpMode {
      */
     @Override
     public void loop() {
-
 
         telemetry.addData("Status", "Running: " + runtime.toString());
         telemetry.addData("Ball held", robot.capBallClaw.getPosition()<0.7);
@@ -165,9 +155,6 @@ public class TemplateOpMode_Team11155TankOld extends OpMode {
             robot.ballLifterRight.setPosition(robot.Hitech_Servo_Stop_Right);
 
         }
-
-
-
         if (gamepad2.dpad_up) {
             if ((!robot.touchSensor.isPressed() || (robot.touchSensor.isPressed() && lastMotorDirection == -1)) && runtime.seconds() < 150) {
                 robot.capBallLifter.setPower(1);
@@ -178,7 +165,6 @@ public class TemplateOpMode_Team11155TankOld extends OpMode {
                 robot.capBallLifter.setPower(0);
             }
         }
-
 
         if (gamepad2.dpad_down){
             if( (!robot.touchSensor.isPressed() || (robot.touchSensor.isPressed() && lastMotorDirection == 1)) && runtime.seconds() < 150) {
@@ -192,16 +178,13 @@ public class TemplateOpMode_Team11155TankOld extends OpMode {
             }
         }
 
-
         if (!gamepad2.dpad_up && !gamepad2.dpad_down){
             robot.capBallLifter.setPower(0);
         }
 
-
         if (runtime.milliseconds()>= 149900){
             robot.capBallLifter.setPower(0);
         }
-
 
         if (gamepad2.dpad_left ){
             CurrentServoPosition = robot.Servo_max_position;
@@ -226,29 +209,21 @@ public class TemplateOpMode_Team11155TankOld extends OpMode {
 
         }
 
-
         if (gamepad2.left_bumper && runtime.seconds()<150)
             robot.beaconButtonPusher.setPosition(robot.CONTINUOUS_SERVO_FORWARD);
-
         if (gamepad2.right_bumper && runtime.seconds()<150)
             robot.beaconButtonPusher.setPosition(robot.CONTINUOUS_SERVO_REVERSE);
-
-
         if (gamepad2.right_bumper == false && gamepad2.left_bumper == false)
             robot.beaconButtonPusher.setPosition(robot.CONTINUOUS_SERVO_stop);
 
 /*==================================================================================================
         if (gamepad1.dpad_up && runtime.seconds()<150) {
-
-            robot.ballFeeder.setPosition(robot.CONTINUOUS_SERVO_FORWARD);
-
+        robot.ballFeeder.setPosition(robot.CONTINUOUS_SERVO_FORWARD);
             robot.ballFeeder.setPosition(robot.CONTINUOUS_SERVO_stop);
         }
 
         if (gamepad1.dpad_down && runtime.seconds()<150) {
-
             robot.ballFeeder.setPosition(robot.CONTINUOUS_SERVO_REVERSE);
-
             robot.ballFeeder.setPosition(robot.CONTINUOUS_SERVO_stop);
         }
 */
@@ -264,17 +239,13 @@ public class TemplateOpMode_Team11155TankOld extends OpMode {
        else {
 //==================================================================================================
 
-
-
             if (gamepad1.left_trigger > 0 && runtime.milliseconds() < 149990) {
                 robot.gyroDriveWithoutEncoder(robot.DRIVE_SPEED, 1, currentHeading);
             }
 
-
             if (gamepad1.right_trigger > 0 && runtime.milliseconds() < 149990 ) {
                 robot.gyroDriveWithoutEncoder(robot.DRIVE_SPEED, -1, currentHeading);
             }
-
 
 //==================================================================================================
 
@@ -300,15 +271,7 @@ public class TemplateOpMode_Team11155TankOld extends OpMode {
             robot.stopEffectors();
         }
 
-
     }
-
-
-
-
-
-
-
 
     /*
      * Code to run ONCE after the driver hits STOP
@@ -325,7 +288,6 @@ public class TemplateOpMode_Team11155TankOld extends OpMode {
            if (this.getRuntime() > (ms+starttime)) {
                return;
            }
-
        }
    }
 
