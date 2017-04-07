@@ -85,7 +85,7 @@ public class AutonamousRedAlianceTeam11155Beta extends LinearOpMode {
 
 
     HardwareBallShooter robot = new HardwareBallShooter();
-    static  final int   wallFollowDegree=-173;
+    static  final int   wallFollowDegree=-180;
     static final double targetDistance = 7;
     static final double targetHeading = 0;
     static final double maxDistanceTraveled = -36;
@@ -146,7 +146,7 @@ public class AutonamousRedAlianceTeam11155Beta extends LinearOpMode {
         robot.setDriveEncoderMode(true);
         if(Math.max(robot.leftMaxCount,robot.rightMaxCount)>2000){
             DRIVE_SPEED=0.13;
-            stopDistance=13.5;
+            stopDistance=8;
         }
 
         // Wait for the game to start (Display Gyro value), and reset gyro before we move..
@@ -179,7 +179,7 @@ public class AutonamousRedAlianceTeam11155Beta extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        robot.shootTWoCurvedBallControlled(robot.targetCountPerSecondBallShooter+450,robot.targetCountPerSecondBallShooterHigh-750, 800);
+        robot.shootTWoCurvedBallControlled(robot.targetCountPerSecondBallShooter+550,robot.targetCountPerSecondBallShooterHigh-600, 800);
 
 
         robot.setDriveSpeed(DRIVE_SPEED, DRIVE_SPEED, -1);
@@ -190,12 +190,19 @@ public class AutonamousRedAlianceTeam11155Beta extends LinearOpMode {
             idle();
         }   // Uses the gyroDrive directly with a heading of 45 degrees to the wall. Uses automatic tracing.
         gyroDrive(DRIVE_SPEED*3,36,-135);
-        while( opModeIsActive() && (robot.rangeRead(robot.rangeAreader)>12) ) {
+        while( opModeIsActive() && (robot.rangeRead(robot.rangeCreader)>6.5) ) {
 
-            gyroDriveWithoutEncoder(DRIVE_SPEED*2 , 1, -150);
+            gyroDriveWithoutEncoder(DRIVE_SPEED*2.5 , 1, -150);
+            telemetry.addData("FrontRangeSensor","=%5.2f",robot.rangeRead(robot.rangeCreader));
+            telemetry.update();
 
 
 
+            idle();
+        }
+
+        while (opModeIsActive() && robot.gyro.getIntegratedZValue() > -165){
+            robot.setDriveSpeed(DRIVE_SPEED, -DRIVE_SPEED  , 1);
             idle();
         }
 
@@ -203,7 +210,7 @@ public class AutonamousRedAlianceTeam11155Beta extends LinearOpMode {
         //      if (robot.range.getDistance(DistanceUnit.INCH)/Math.cos(Math.toRadians((-180-robot.gyro.getIntegratedZValue())))-14*Math.sin(Math.toRadians((-180-robot.gyro.getIntegratedZValue())))<10){
         while( opModeIsActive() && robot.odsSensor.getRawLightDetected()<2) {
             //wallFollowReverse(DRIVE_SPEED/1.5,1,-180,25,robot.gyro,robot.range,robot.odsSensor,14);
-            gyroDriveWithoutEncoder(DRIVE_SPEED, 1, wallFollowDegree);
+            gyroDriveWithoutEncoder(DRIVE_SPEED*1.5, 1, wallFollowDegree);
 
 
             idle();
@@ -221,7 +228,7 @@ public class AutonamousRedAlianceTeam11155Beta extends LinearOpMode {
         robot.stopRobot();
 
 
-        double distToWall = robot.rangeRead(robot.rangeAreader);
+        double distToWall = robot.rangeRead(robot.rangeCreader);
         timeDifferenceMS = (long) (distToWall - 3) * 600 /3;
         timeDifferenceMS=(long) Range.clip(timeDifferenceMS,1,800);
         robot.outBeaconButton(timeDifferenceMS,this);
@@ -245,12 +252,12 @@ public class AutonamousRedAlianceTeam11155Beta extends LinearOpMode {
 
         if (redValue1>blueValue1)
         {
-            robot.pushBeaconButton(timeDifferenceMS,this,robot.rangeAreader);
+            robot.pushBeaconButton(timeDifferenceMS,this,robot.rangeCreader);
         }
         else {
             gyroDrive(DRIVE_SPEED, 5.5, wallFollowDegree);
             robot.stopRobot();
-            robot.pushBeaconButton(timeDifferenceMS,this,robot.rangeAreader);
+            robot.pushBeaconButton(timeDifferenceMS,this,robot.rangeCreader);
 
         }
 
@@ -262,7 +269,7 @@ public class AutonamousRedAlianceTeam11155Beta extends LinearOpMode {
                 Thread.currentThread().interrupted();
 
             }
-            robot.pushBeaconButton(timeDifferenceMS,this,robot.rangeAreader);
+            robot.pushBeaconButton(timeDifferenceMS,this,robot.rangeCreader);
         }
 
 
@@ -271,7 +278,7 @@ public class AutonamousRedAlianceTeam11155Beta extends LinearOpMode {
 
         robot.setDriveSpeed(DRIVE_SPEED, DRIVE_SPEED, -1);
         gyroDrive(DRIVE_SPEED * 3.5, -28, wallFollowDegree);
-        if (robot.rangeRead(robot.rangeAreader)<7.5 && robot.rangeRead(robot.rangeAreader)>4){
+        if (robot.rangeRead(robot.rangeCreader)<7.5 && robot.rangeRead(robot.rangeCreader)>4){
             while (opModeIsActive() && robot.odsSensor.getRawLightDetected() < 2) {
 
                 gyroDriveWithoutEncoder(DRIVE_SPEED , -1, wallFollowDegree);
@@ -284,7 +291,7 @@ public class AutonamousRedAlianceTeam11155Beta extends LinearOpMode {
         }
         else {
             while (opModeIsActive() && robot.odsSensor.getRawLightDetected() < 2) {
-                wallFollow(DRIVE_SPEED / 1.5, -1, wallFollowDegree, 25, robot.gyro, robot.rangeAreader, robot.odsSensor);
+                wallFollow(DRIVE_SPEED / 1.5, -1, wallFollowDegree, 25, robot.gyro, robot.rangeCreader, robot.odsSensor);
                 //  gyroDriveWithoutEncoder(DRIVE_SPEED , -1, -180);
 
 
@@ -293,7 +300,7 @@ public class AutonamousRedAlianceTeam11155Beta extends LinearOpMode {
             robot.stopRobot();
         }
 
-        distToWall = robot.rangeRead(robot.rangeAreader);
+        distToWall = robot.rangeRead(robot.rangeCreader);
         timeDifferenceMS = (long) (distToWall - 3) * 600 / 3;
 
         timeDifferenceMS = (long) Range.clip(timeDifferenceMS, 1, 800);
@@ -318,10 +325,10 @@ public class AutonamousRedAlianceTeam11155Beta extends LinearOpMode {
         // Now depends on the color it first reads, it either moves or stays there to push the button
 
         if (redValue1 > blueValue1) {
-            if (opModeIsActive() && !isStopRequested() && (30000-runtime.milliseconds())> 2000) robot.pushBeaconButton(timeDifferenceMS,this,robot.rangeAreader);
+            if (opModeIsActive() && !isStopRequested() && (30000-runtime.milliseconds())> 2000) robot.pushBeaconButton(timeDifferenceMS,this,robot.rangeCreader);
         } else {
             gyroDrive(DRIVE_SPEED, 5.5, wallFollowDegree);
-            if (opModeIsActive() && (30000-runtime.milliseconds())> 2000) robot.pushBeaconButton(timeDifferenceMS,this,robot.rangeAreader);
+            if (opModeIsActive() && (30000-runtime.milliseconds())> 2000) robot.pushBeaconButton(timeDifferenceMS,this,robot.rangeCreader);
 
 
         }
@@ -333,10 +340,10 @@ public class AutonamousRedAlianceTeam11155Beta extends LinearOpMode {
                 Thread.currentThread().interrupted();
 
             }
-            robot.pushBeaconButton(timeDifferenceMS,this,robot.rangeAreader);
+            robot.pushBeaconButton(timeDifferenceMS,this,robot.rangeCreader);
         }
 
-        if (opModeIsActive() && !isStopRequested() && (30000-runtime.milliseconds())> 1000) robot.retractBeaconButton(timeDifferenceMS,this);
+        if (opModeIsActive() && !isStopRequested() && (30000-runtime.milliseconds())> 500) robot.retractBeaconButton(timeDifferenceMS,this);
 
     }
 
@@ -963,5 +970,3 @@ public class AutonamousRedAlianceTeam11155Beta extends LinearOpMode {
 
 
 
-
-# 2016-2017-Code
