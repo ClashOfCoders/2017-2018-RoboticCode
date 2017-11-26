@@ -57,7 +57,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @TeleOp(name="Basic: Iterative OpMode", group="Iterative Opmode")
-@Disabled
+//@Disabled
 public class Team11155TeleOp extends OpMode
 {
     // Declare OpMode members.
@@ -67,8 +67,9 @@ public class Team11155TeleOp extends OpMode
     private DcMotor wheelThree = null;
     private DcMotor wheelFour = null;
 
-    private HardwareRelic robot = new HardwareRelic();
 
+    private HardwareRelic robot = new HardwareRelic();
+private boolean relicPosition = true;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -125,15 +126,72 @@ public class Team11155TeleOp extends OpMode
         // Send calculated power to wheels
         double angle = robot.getAngle(gamepad1.left_stick_x, gamepad1.left_stick_y);
 
-        double rotation = gamepad1.right_stick_x / 2;
+        robot.angleDrive(Math.sqrt(gamepad1.left_stick_x*gamepad1.left_stick_x + gamepad1.left_stick_y*gamepad1.left_stick_y), angle, (double)gamepad1.right_stick_x);
 
-        robot.setSpeed(robot.wheelOne.getPower() + rotation, robot.wheelTwo.getPower() + rotation, robot.wheelThree.getPower() + rotation, robot.wheelFour.getPower() + rotation);
 
 
         telemetry.addData("angle", angle);
         telemetry.addData("Power 1-2-3-4", robot.wheelOne.getPower() + "-" + robot.wheelTwo.getPower() + "-" + robot.wheelThree.getPower() + "-" + robot.wheelFour.getPower());
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
+
+        if(gamepad2.dpad_right && !(robot.CubeSlideSwitchR.isPressed() || robot.CubeSlideSwitchL.isPressed())) {
+            robot.CubeTimeBelt.setPower(1);
+        }
+        else if(gamepad2.dpad_left && !(robot.CubeSlideSwitchR.isPressed() || robot.CubeSlideSwitchL.isPressed())) {
+            robot.CubeTimeBelt.setPower(-1);
+        }
+        else if(((!gamepad2.dpad_right && !gamepad2.dpad_left) || (robot.CubeSlideSwitchR.isPressed() || robot.CubeSlideSwitchL.isPressed())))
+        {
+            robot.CubeTimeBelt.setPower(0);
+        }
+
+        telemetry.addData("Switch R/ Switch L", robot.CubeSlideSwitchR.isPressed() + " / " + robot.CubeSlideSwitchL.isPressed());
+        telemetry.addData("dpadLeft / dpadRight / ", gamepad2.dpad_left + " / " + gamepad2.dpad_right);
+
+        if(robot.CubeSlideSwitchR.isPressed()) {
+            while (robot.CubeSlideSwitchR.isPressed())
+                robot.CubeTimeBelt.setPower(1);
+            robot.CubeTimeBelt.setPower(0);
+        }
+        if(robot.CubeSlideSwitchL.isPressed()) {
+            while (robot.CubeSlideSwitchL.isPressed())
+                robot.CubeTimeBelt.setPower(-1);
+            robot.CubeTimeBelt.setPower(0);
+        }
+
+
+
+
+        telemetry.addData("Position of CubeTimeBelt", robot.CubeTimeBelt.getPower());
+
+
+        if(gamepad1.x)
+            robot.RelClaw.setPosition(.4);
+
+        if(gamepad1.y)
+        robot.RelClaw.setPosition(0.0);
+
+        if (gamepad2.a){
+            robot.clawExtenderLeft.setPosition(0.5);
+            robot.clawExtenderRight.setPosition(0.5);
+        }
+        if (gamepad2.b){
+            robot.clawExtenderRight.setPosition(1);
+            robot.clawExtenderLeft.setPosition(0);
+        }
+
+        if (gamepad2.x)
+            robot.relicClawLifter.setPower(0.75);
+        else if (gamepad2.y){
+            robot.relicClawLifter.setPower(-0.75);
+        }
+        else
+            robot.relicClawLifter.setPower(0);
+
+
+
+
     }
 
     /*
@@ -141,6 +199,7 @@ public class Team11155TeleOp extends OpMode
      */
     @Override
     public void stop() {
+        robot.stopRobot();
     }
 
 }
